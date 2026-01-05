@@ -11,7 +11,7 @@ export default function Item({itemText}){
             style={styles.checkbox}
             value={isChecked}
             onValueChange={setChecked}
-            color={isChecked ? 'green' : 'red'}
+            color={isChecked ? 'green' : 'white'}
             />
             <Text style={styles.text}>{itemText}</Text>
         </View>
@@ -22,7 +22,7 @@ const styles = StyleSheet.create({
     containerItem:{
         flexDirection: 'row',
         alignItems: 'center',
-        backgroundColor: 'rgba(55, 55, 55, 0.2)',
+        backgroundColor: 'rgba(35, 176, 211, 0.8)',
         width: '100%',
         margin: 5,
         borderRadius:25,
@@ -34,6 +34,6 @@ const styles = StyleSheet.create({
     text:{
         fontSize: 16,
         fontWeight: 'bold',
-        color: 'white'
+        color: 'white',
     }
 })
