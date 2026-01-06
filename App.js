@@ -4,7 +4,6 @@ import { useState } from 'react';
 import Button from './components/button';
 import BigTitle from './components/Titles/bigTitle';
 import {SafeAreaView, SafeAreaProvider} from 'react-native-safe-area-context';
-import Item from './components/item';
 import ItemsList from './components/items-list';
 
 const initialGoals = [
@@ -25,11 +24,17 @@ export default function button() {
   const [selectedIndex, setSelectedIndex] = useState(null);
 
   const [showAddModal, setShowAddModal] = useState(false);
+  const [showAddEditModal, setShowAddEditModal] = useState(false);
   const [newGoalText, setNewGoalText] = useState('');
 
   const openAddModal = () => setShowAddModal(true);
+
   const closeAddModal = () => {
     setShowAddModal(false);
+    setNewGoalText('');
+  };
+  const closeAddEditModal = () => {
+    setShowAddEditModal(false);
     setNewGoalText('');
   };
 
@@ -39,9 +44,20 @@ export default function button() {
       Alert.alert('Texte vide', 'Veuillez entrer un objectif.');
       return;
     }
-    setGoals(prev => [trimmed, ...prev]);
-    setSelectedIndex(0);
-    closeAddModal();
+    if(selectedIndex !== null){
+      setGoals[selectedIndex]=trimmed;
+      setGoals(prev =>
+        prev.map((goal, index) =>
+          index === selectedIndex ? trimmed : goal
+        )
+      );
+      setSelectedIndex(0);
+      closeAddEditModal();
+    }else{
+      setGoals(prev => [trimmed, ...prev]);
+      setSelectedIndex(0);
+      closeAddModal();
+    }
   };
 
   const editGoal = () => {
@@ -49,7 +65,8 @@ export default function button() {
       Alert.alert("Aucun objectif sélectionné", "Veuillez sélectionner un objectif à modifier.");
       return;
     }
-    setGoals(prev => prev.map((g, idx) => idx === selectedIndex ? `${g} (modifié)` : g));
+    setNewGoalText(goals[selectedIndex]);
+    setShowAddEditModal(true);
   }
 
   const removeGoal = () => {
@@ -68,6 +85,30 @@ export default function button() {
           <BigTitle value="Objectifs de vie" />
           <View style={styles.Maincontainer}>
             <ItemsList data={goals} selectedIndex={selectedIndex} onSelectItem={setSelectedIndex} />
+
+            <Modal
+              visible={showAddEditModal}
+              animationType="slide"
+              transparent={true}
+              onRequestClose={closeAddEditModal}
+            >
+              <View style={styles.modalOverlay}>
+                <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={styles.modalContent}>
+                  <Text style={styles.modalTitle}>Modification</Text>
+                  <TextInput
+                    style={styles.input}
+                    placeholder="Tapez l'objectif..."
+                    value={newGoalText}
+                    onChangeText={setNewGoalText}
+                    autoFocus
+                  />
+                  <View style={styles.modalButtons}>
+                    <Button value="Annuler" onPress={closeAddEditModal} style={{marginRight:10}} />
+                    <Button value="Modifier" onPress={confirmAddGoal} />
+                  </View>
+                </KeyboardAvoidingView>
+              </View>
+            </Modal>
 
             <Modal
               visible={showAddModal}

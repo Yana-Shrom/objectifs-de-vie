@@ -26,12 +26,13 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         backgroundColor: 'rgba(35, 176, 211, 0.8)',
         width: '100%',
-        margin: 5,
+        marginTop: 5,
         borderRadius:25,
+        padding: 5,
         overflow : 'hidden'
     },
     checkbox: {
-        margin: 8,
+        margin: 10,
     },
     text:{
         fontSize: 16,
