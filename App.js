@@ -44,14 +44,13 @@ export default function button() {
       Alert.alert('Texte vide', 'Veuillez entrer un objectif.');
       return;
     }
-    if(selectedIndex !== null){
+    if(selectedIndex !== null && showAddEditModal){
       setGoals[selectedIndex]=trimmed;
       setGoals(prev =>
         prev.map((goal, index) =>
           index === selectedIndex ? trimmed : goal
         )
       );
-      setSelectedIndex(0);
       closeAddEditModal();
     }else{
       setGoals(prev => [trimmed, ...prev]);
