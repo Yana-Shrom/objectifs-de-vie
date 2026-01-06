@@ -7,16 +7,45 @@ import {SafeAreaView, SafeAreaProvider} from 'react-native-safe-area-context';
 import ItemsList from './components/items-list';
 
 const initialGoals = [
-  "Faire les courses",
-  "Aller à la salle de sport 3 fois par semaine",
-  "Monter à plus de 5000m d altitude",
-  "Acheter mon premier appartement",
-  "Perdre 5 kgs",
-  "Gagner en productivité",
-  "Apprendre un nouveau langage",
-  "Faire une mission en freelance",
-  "Organiser un meetup autour de la tech",
-  "Faire un triathlon",
+  {
+    goal: "Faire les courses",
+    done: false
+  },
+  {
+    goal: "Aller à la salle de sport 3 fois par semaine",
+    done: false
+  },
+  {
+    goal: "Monter à plus de 5000m d altitude",
+    done: false
+  },
+  {
+    goal: "Acheter mon premier appartement",
+  },
+  {
+    goal: "Perdre 5 kgs",
+    done: false
+  },
+  {
+    goal: "Gagner en productivité",
+    done: false
+  },
+  {
+    goal: "Apprendre un nouveau langage",
+    done: false
+  },
+  {
+    goal: "Faire une mission en freelance",
+    done: false
+  },
+  {
+    goal: "Organiser un meetup autour de la tech",
+    done: false
+  },
+  {
+    goal: "Faire un triathlon",
+    done: false
+  }
 ];
 
 export default function button() {
@@ -67,6 +96,7 @@ export default function button() {
     setNewGoalText(goals[selectedIndex]);
     setShowAddEditModal(true);
   }
+
 
   const removeGoal = () => {
     if (selectedIndex === null) {
