@@ -37,10 +37,9 @@ export default function button() {
           <View style={styles.Maincontainer}>
             <ItemsList data={sampleGoals} />
             <View style={styles.buttonContainer2}>
-              <Button style={styles.fullWidthButton} value="Add1" />
+              <Button style={styles.fullWidthButton} value="Add" />
             </View>
             <View style={styles.buttonContainer}>
-              <Button style={styles.smallButton} value="Add2" />
               <Button style={styles.smallButton} value="Edit" />
               <Button style={styles.smallButton} value="Supp" />
             </View>
