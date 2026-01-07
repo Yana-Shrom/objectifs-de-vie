@@ -10,7 +10,8 @@ export default function BigTitle({ value }) {
 
 const styles = StyleSheet.create({
     title: {
-        color: '#000000',
+        color: 'rgba(35, 176, 211, 0.8)',
         fontSize: 54,
+        textAlign: 'center'
     }
 })

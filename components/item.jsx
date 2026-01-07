@@ -22,17 +22,18 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         backgroundColor: 'rgba(35, 176, 211, 0.8)',
-        width: '100%',
+        width: '95%',
+        marginHorizontal:10,
         marginTop: 5,
         borderRadius:25,
-        padding: 5,
+        padding: 2,
         overflow : 'hidden'
     },
     checkbox: {
-        margin: 10,
+        margin: 8,
     },
     text:{
-        fontSize: 16,
+        fontSize: 14,
         fontWeight: 'bold',
         color: 'white',
     },
