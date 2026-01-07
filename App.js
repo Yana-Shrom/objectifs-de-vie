@@ -1,4 +1,4 @@
-import { StatusBar } from 'expo-status-bar';
+import { StatusBar } from 'react-native';
 import { StyleSheet, Text, View, ImageBackground, Alert, Modal, TextInput, KeyboardAvoidingView, Platform } from 'react-native';
 import { useState } from 'react';
 import Button from './components/button';
@@ -21,6 +21,7 @@ const initialGoals = [
   },
   {
     goal: "Acheter mon premier appartement",
+    done: false
   },
   {
     goal: "Perdre 5 kgs",
@@ -74,15 +75,14 @@ export default function button() {
       return;
     }
     if(selectedIndex !== null && showAddEditModal){
-      setGoals[selectedIndex]=trimmed;
       setGoals(prev =>
-        prev.map((goal, index) =>
-          index === selectedIndex ? trimmed : goal
+        prev.map((g, index) =>
+          index === selectedIndex ? { ...g, goal: trimmed } : g
         )
       );
       closeAddEditModal();
     }else{
-      setGoals(prev => [trimmed, ...prev]);
+      setGoals(prev => [{goal: trimmed, done: false}, ...prev]);
       setSelectedIndex(0);
       closeAddModal();
     }
@@ -93,9 +93,18 @@ export default function button() {
       Alert.alert("Aucun objectif sélectionné", "Veuillez sélectionner un objectif à modifier.");
       return;
     }
-    setNewGoalText(goals[selectedIndex]);
+    setNewGoalText(goals[selectedIndex].goal);
     setShowAddEditModal(true);
   }
+
+  const toggleDone = (index, value) => {
+    setGoals(prev => prev.map((g, i) => i === index ? { ...g, done: value } : g));
+  };
+
+  const activeGoals = goals.map((g, i) => ({ ...g, originalIndex: i })).filter(g => !g.done);
+  const doneGoals = goals.map((g, i) => ({ ...g, originalIndex: i })).filter(g => g.done);
+
+
 
 
   const removeGoal = () => {
@@ -113,7 +122,14 @@ export default function button() {
         <SafeAreaView style={styles.container}>
           <BigTitle value="Objectifs de vie" />
           <View style={styles.Maincontainer}>
-            <ItemsList data={goals} selectedIndex={selectedIndex} onSelectItem={setSelectedIndex} />
+            <ItemsList data={activeGoals} selectedIndex={selectedIndex} onSelectItem={setSelectedIndex} onToggleItem={toggleDone} />
+
+            {doneGoals.length > 0 && (
+              <>
+                <Text style={styles.sectionTitle}>Complétés</Text>
+                <ItemsList data={doneGoals} onSelectItem={() => {}} onToggleItem={toggleDone} />
+              </>
+            )}
 
             <Modal
               visible={showAddEditModal}
@@ -246,5 +262,14 @@ const styles = StyleSheet.create({
   modalButtons: {
     flexDirection: 'row',
     justifyContent: 'flex-end',
+  },
+  sectionTitle: {
+    width: '100%',
+    paddingHorizontal: 10,
+    fontSize: 18,
+    fontWeight: '700',
+    color: '#fff',
+    marginTop: 12,
+    marginBottom: 6,
   }
 });
