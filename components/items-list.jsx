@@ -2,26 +2,47 @@ import { FlatList, StyleSheet, StatusBar } from "react-native";
 import {SafeAreaView} from 'react-native-safe-area-context';
 import Item from "./item";
 
-export default function ItemsList({ data, selectedIndex = null, onSelectItem = () => {}, onToggleItem = () => {} }){
+export default function ItemsList({ goals = [], selectedId = null, onSelectItem = () => {}, onToggleItem = () => {} }){
+    const buildList = (list) => {
+        const mapByParent = {};
+        list.forEach(g => {
+            const p = g.parentId ?? 'root';
+            if (!mapByParent[p]) mapByParent[p] = [];
+            mapByParent[p].push(g);
+        });
+        const result = [];
+        const walk = (parentId, depth) => {
+            const children = mapByParent[parentId] || [];
+            children.forEach(child => {
+                result.push({ ...child, depth });
+                walk(child.id, depth + 1);
+            });
+        };
+        walk('root', 0);
+        return result;
+    };
+
+    const data = buildList(goals);
+
     return(
             <SafeAreaView style={styles.container}>
             <FlatList
                 data={data}
-                renderItem={({item, index}) => {
-                    const itemIndex = (item && typeof item.originalIndex === 'number') ? item.originalIndex : index;
-                    const text = (item && typeof item.goal === 'string') ? item.goal : item;
-                    const checked = (item && typeof item.done !== 'undefined') ? !!item.done : false;
+                renderItem={({item}) => {
+                    const text = item.goal;
+                    const checked = !!item.done;
                     return (
                         <Item 
                           itemText={text} 
-                          isSelected={itemIndex === selectedIndex} 
-                          onPress={() => onSelectItem(itemIndex)}
+                          depth={item.depth}
+                          isSelected={item.id === selectedId} 
+                          onPress={() => onSelectItem(item.id)}
                           isChecked={checked}
-                          onCheckToggle={(value) => onToggleItem(itemIndex, value)}
+                          onCheckToggle={(value) => onToggleItem(item.id, value)}
                         />
                     )
                 }}
-                keyExtractor={(item, index) => (item && item.goal ? item.goal + (item.originalIndex ?? index) : index.toString())}
+                keyExtractor={(item) => item.id.toString()}
             />
             </SafeAreaView>
     )
